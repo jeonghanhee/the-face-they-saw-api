@@ -25,7 +25,7 @@ def send_join(client_id: str):
     }
 
     response = requests.post(
-        f"{BASE_URL}/join",
+        f"{BASE_URL}/join_game",
         json=payload,
         headers=headers,
         timeout=5,

@@ -7,6 +7,12 @@ class JoinRequest(BaseModel):
 class JoinResponse(BaseModel):
     message: str
 
+class LeaveRequest(BaseModel):
+    client_id: str
+
+class LeaveResponse(BaseModel):
+    message: str
+
 class CreateScenarioRequest(BaseModel):
     client_id: str
 

@@ -1,9 +1,8 @@
 import random
-from typing import List
 from app.scenario.witness import Witness
 from app.scenario.composite_sketch import CompositeSketch
 from app.scenario.prompt import create_ssp, create_sup
-from app.scenario.scenario import Scenario
+from app.scenario import Scenario
 from app.llm.gemini_client import generate_content
 from app.util.name_generator import get_rand_name
 
