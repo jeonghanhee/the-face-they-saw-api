@@ -12,7 +12,7 @@ class Scenario:
     timezone: str
     statement: List[str]
 
-    def init(self, witness: Witness, composite_sketch: CompositeSketch, indicdent: str, place: str, timezone: str, statement: List[str]):
+    def __init__(self, witness: Witness, composite_sketch: CompositeSketch, indicdent: str, place: str, timezone: str, statement: List[str]):
         self.witness = witness
         self.composite_sketch = composite_sketch
         self.indicdent = indicdent
