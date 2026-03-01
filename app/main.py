@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Header, Request
 from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -6,9 +6,21 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.schemas import *
 from app.middleware.security import secure_endpoint
 from app.cda import CDA
+from babel.support import Translations
+from pathlib import Path
 
 app = FastAPI(title="The Face They Saw API")
 cda = CDA()
+
+LOCALES_DIR = Path(__file__).parent / "locales"
+
+translations_cache = {
+    "ko": Translations.load(LOCALES_DIR, locales=["ko_KR"]),
+    "en": Translations.load(LOCALES_DIR, locales=["en_US"]),
+}
+
+def get_translation(lang: str):
+    return translations_cache.get(lang.lower(), translations_cache["ko"]).gettext
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -19,24 +31,19 @@ async def ping():
     return {"status": "ok"}
 
 @app.post("/join_game", status_code=200, response_model=JoinResponse, dependencies=secure_endpoint())
-async def join_game(req: JoinRequest):
+async def join_game(req: JoinRequest, x_language: str = Header(default="ko")):
+    _ = get_translation(x_language)
     exists = await cda.get_client(req.client_id)
     if exists:
-        return JSONResponse(
-            status_code=409,
-            content={"message": "이미 대기열에 등록된 클라이언트입니다."}
-        )
+        return JSONResponse(status_code=409, content={"message": _("already_registered")})
     await cda.add_client(req.client_id)
-    return {"message": "대기열에 성공적으로 등록했습니다."}
+    return {"message": _("register_success")}
 
 @app.post("/leave_game", status_code=200, response_model=LeaveResponse, dependencies=secure_endpoint())
-async def leave_game(req: LeaveRequest):
+async def leave_game(req: LeaveRequest, x_language: str = Header(default="ko")):
+    _ = get_translation(x_language)
     exists = await cda.get_client(req.client_id)
-    print(exists)
     if exists:
         await cda.remove_client(req.client_id)
-        return {"message": "성공적으로 대기열에서 제거되었습니다."}
-    return JSONResponse(
-        status_code=409,
-        content={"message": "대기열에 등록되어있는 상태가 아닙니다."}
-    )
+        return {"message": _("removed_success")}
+    return JSONResponse(status_code=409, content={"message": _("not_registered")})

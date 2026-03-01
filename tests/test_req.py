@@ -15,6 +15,7 @@ def make_headers():
         "X-Game-Key": GAME_KEY,
         "X-Timestamp": str(timestamp),
         "X-Signature": signature,
+        "X-Language": "ko",
         "Content-Type": "application/json",
     }
 

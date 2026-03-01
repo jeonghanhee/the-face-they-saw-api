@@ -1,0 +1,11 @@
+msgid "already_registered"
+msgstr "This client is already registered in the queue."
+
+msgid "register_success"
+msgstr "Successfully registered in the queue."
+
+msgid "not_registered"
+msgstr "Client is not registered in the queue."
+
+msgid "removed_success"
+msgstr "Successfully removed from the queue."
