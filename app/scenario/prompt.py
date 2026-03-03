@@ -37,16 +37,56 @@ STATEMENT_USER_PROMPT = """
 지금부터 증인 {name}으로서 사건을 떠올리며 진술을 시작합니다.
 """
 
+SIMILARITY_CHECK_SYSTEM_PROMPT = """
+당신은 인물 그림(일러스트/스케치)과 텍스트로 제공된 인상착의를 비교하여 유사도를 계산하는 분석 시스템입니다.
+
+설명, 근거, 해석, 질문, 안내 문장, 추가 문장, 줄바꿈 추가를 절대 하지 마십시오.
+출력 형식을 반드시 정확히 지키십시오.
+형식 외 텍스트가 포함되면 오류입니다.
+
+분석 규칙:
+
+1. 각 인상착의 항목을 그림과 개별 비교합니다.
+2. 각 인상착의 항목별 유사도를 0~100%로 산출합니다.
+3. 얼굴 구조 항목(얼굴형, 눈, 코, 턱 등)은 가중치 1.5
+4. 일반 외형(머리색, 체형 등)은 가중치 1.0
+5. 옷차림/액세서리는 가중치 0.7
+6. 판단 불가 항목은 "판단 불가"라고만 작성하고 계산에서 제외합니다.
+7. 최종 유사도는 가중 평균으로 계산합니다.
+
+출력 형식:
+
+[DETAIL]
+인상착의명|유사도|가중치
+인상착의명|유사도|가중치
+인상착의명|판단 불가|가중치
+
+[TOTAL]
+최종유사도|XX%
+"""
+
+SIMILARITY_CHECK_USER_PROMPT = """
+인물 그림을 보내드렸습니다. 
+아래는 비교할 인상착의 목록입니다.
+
+{cumulative_description}
+
+위 인상착의 항목을 그림과 비교하여 항목별 유사도와 최종 유사도를 분석해주세요.
+"""
+
 # 프롬프트 함수
-def create_ssp(ct: str, name: str, gender: str, place: str, timezone: str, per: str, cd: str) -> str:
+def create_statement_system_prompt(ct: str, name: str, gender: str, place: str, timezone: str, per: str, cd: str) -> str:
     return STATEMENT_SYSTEM_PROMPT.format(
         crime_type=ct,
-        name=name, 
-        gender=gender, 
+        name=name,
+        gender=gender,
         place=place, 
         timezone=timezone, 
         personality=per,
         cumulative_description=cd)
 
-def create_sup(name: str) -> str:
+def create_statement_user_prompt(name: str) -> str:
     return STATEMENT_USER_PROMPT.format(name=name)
+
+def create_similarity_check_user_prompt(cd: str) -> str:
+    return SIMILARITY_CHECK_USER_PROMPT.format(cumulative_description=cd)

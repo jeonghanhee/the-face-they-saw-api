@@ -1,9 +1,7 @@
-from dataclasses import dataclass
 from typing import List
 from app.scenario.witness import Witness
 from app.scenario.composite_sketch import CompositeSketch
 
-@dataclass
 class Scenario:
     witness: Witness
     composite_sketch: CompositeSketch

@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Header, Request
+from fastapi import Depends, FastAPI, File, Header, Request, UploadFile
 from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
 from app.scenario import Scenario
 from app.services.scenario_factory import create_scenario
+from app.services.similarity_service import similarity_check
 from app.schemas import *
 from app.middleware.security import secure_endpoint
 from app.cda import CDA
@@ -64,4 +65,20 @@ async def retrieve_scenario(req: RetrieveScenarioRequest, x_language: str = Head
         "name": new_scenario.witness.name,
         "gender": new_scenario.witness.gender,
         "statement": new_scenario.statement
+    }
+
+@app.post("/upload_montage", status_code=200, response_model=UploadMontageResponse)
+async def upload_montage(req: GeneralRequest = Depends(GeneralRequest.as_form), file: UploadFile = File(), x_language: str = Header(default="ko")):
+    _ = get_translation(x_language)
+    exists = await cda.get_client(req.client_id) 
+    if not exists:
+        return JSONResponse(status_code=409, content={"message": _("not_registered")})
+    if not exists.scenario:
+        return JSONResponse(status_code=409, content={"message": _("not_found_scenario")})
+    result = await similarity_check(exists.scenario, file)
+    print(result)
+
+    return {
+        "details": [],
+        "total": ()
     }

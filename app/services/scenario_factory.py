@@ -1,7 +1,7 @@
 import random
 from app.scenario.witness import Witness
 from app.scenario.composite_sketch import CompositeSketch
-from app.scenario.prompt import create_ssp, create_sup
+from app.scenario.prompt import create_statement_system_prompt, create_statement_user_prompt
 from app.scenario import Scenario
 from app.llm.gemini_client import generate_content
 from korean_name_generator import namer
@@ -45,7 +45,7 @@ async def create_scenario(level: int) -> Scenario:
     # 몽타주 생성
     composite_sketch = CompositeSketch()
     if level == 1:
-        composite_sketch.set_face_shape(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
+        composite_sketch.set_face_shape("동근형") #(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
     if level == 2:
         composite_sketch.set_eyes_of(random.choice(EYES_OFS) if EYES_OFS else "")
     if level == 3:
@@ -56,7 +56,7 @@ async def create_scenario(level: int) -> Scenario:
         composite_sketch.set_singularity(random.choice(SINGULARITIES) if SINGULARITIES else "")
 
     # 시스템 프롬프트 생성
-    ssp = create_ssp(
+    ssp = create_statement_system_prompt(
         ct=i_type,
         name=witness.name,
         gender=witness.gender,
@@ -66,7 +66,7 @@ async def create_scenario(level: int) -> Scenario:
         cd=composite_sketch.cumulative_description
     )
     # 유저 프롬프트 생성
-    scp = create_sup(name=witness.name)
+    scp = create_statement_user_prompt(name=witness.name)
 
     # 진술 생성
     raw_statement = await generate_content(scp, ssp)
