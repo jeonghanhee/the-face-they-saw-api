@@ -9,3 +9,9 @@ msgstr "대기열에 등록되어있는 상태가 아닙니다."
 
 msgid "removed_success"
 msgstr "성공적으로 대기열에서 제거되었습니다."
+
+msgid "cannot_retrieve_scenario"
+msgstr "대기열에 등록되어있지 않아 시나리오 정보를 불러올 수 없습니다"
+
+msgid "alreay_scenario"
+msgstr "이미 진행 중인 시나리오가 있습니다"

@@ -9,3 +9,9 @@ msgstr "Client is not registered in the queue."
 
 msgid "removed_success"
 msgstr "Successfully removed from the queue."
+
+msgid "cannot_retrieve_scenario"
+msgstr "Cannot retrieve scenario information because it is not registered in the queue."
+
+msgid "alreay_scenario"
+msgstr "There is already a scenario in progress."

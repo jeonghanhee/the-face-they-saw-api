@@ -5,6 +5,7 @@ import requests
 BASE_URL = "http://127.0.0.1:8000"
 GAME_KEY = "tfts-game-key-v1"
 SIGN_SECRET = "tfts-sign-secret"
+CLIENT_ID = "test-client-001"
 
 def make_headers():
     timestamp = int(time.time())
@@ -19,10 +20,10 @@ def make_headers():
         "Content-Type": "application/json",
     }
 
-def send_join(client_id: str):
+def send_join():
     headers = make_headers()
     payload = {
-        "client_id": client_id
+        "client_id": CLIENT_ID
     }
 
     response = requests.post(
@@ -35,5 +36,24 @@ def send_join(client_id: str):
     print("STATUS :", response.status_code)
     print("RESPONSE:", response.json())
 
+
+def send_retrieve_scenario():
+    headers = make_headers()
+    payload = {
+        "client_id": CLIENT_ID,
+        "level": 5
+    }
+
+    response = requests.post(
+        f"{BASE_URL}/retrieve_scenario",
+        json=payload,
+        headers=headers
+    )
+
+    print("STATUS :", response.status_code)
+    print("RESPONSE:", response.json())
+
 if __name__ == "__main__":
-    send_join("test-client-001")
+    send_join()
+    send_retrieve_scenario()
+    send_retrieve_scenario()

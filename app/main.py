@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
+from app.scenario import Scenario
+from app.services.scenario_factory import create_scenario
 from app.schemas import *
 from app.middleware.security import secure_endpoint
 from app.cda import CDA
@@ -30,8 +32,8 @@ app.add_middleware(SlowAPIMiddleware)
 async def ping():
     return {"status": "ok"}
 
-@app.post("/join_game", status_code=200, response_model=JoinResponse, dependencies=secure_endpoint())
-async def join_game(req: JoinRequest, x_language: str = Header(default="ko")):
+@app.post("/join_game", status_code=200, response_model=GeneralResponse, dependencies=secure_endpoint())
+async def join_game(req: GeneralRequest, x_language: str = Header(default="ko")):
     _ = get_translation(x_language)
     exists = await cda.get_client(req.client_id)
     if exists:
@@ -39,11 +41,27 @@ async def join_game(req: JoinRequest, x_language: str = Header(default="ko")):
     await cda.add_client(req.client_id)
     return {"message": _("register_success")}
 
-@app.post("/leave_game", status_code=200, response_model=LeaveResponse, dependencies=secure_endpoint())
-async def leave_game(req: LeaveRequest, x_language: str = Header(default="ko")):
+@app.post("/leave_game", status_code=200, response_model=GeneralResponse, dependencies=secure_endpoint())
+async def leave_game(req: GeneralRequest, x_language: str = Header(default="ko")):
     _ = get_translation(x_language)
     exists = await cda.get_client(req.client_id)
     if exists:
         await cda.remove_client(req.client_id)
         return {"message": _("removed_success")}
     return JSONResponse(status_code=409, content={"message": _("not_registered")})
+
+@app.post("/retrieve_scenario", status_code=200, response_model=RetrieveScenarioResponse)
+async def retrieve_scenario(req: RetrieveScenarioRequest, x_language: str = Header(default="ko")):
+    _ = get_translation(x_language)
+    exists = await cda.get_client(req.client_id)
+    if not exists:
+        return JSONResponse(status_code=409, content={"message": _("cannot_retrieve_scenario")})
+    if exists.scenario:
+        return JSONResponse(status_code=409, content={"message": _("alreay_scenario")})
+    new_scenario = await create_scenario(req.level)
+    exists.scenario = new_scenario # 시나리오 등록 
+    return {
+        "name": new_scenario.witness.name,
+        "gender": new_scenario.witness.gender,
+        "statement": new_scenario.statement
+    }
