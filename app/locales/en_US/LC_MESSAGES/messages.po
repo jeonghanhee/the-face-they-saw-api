@@ -17,4 +17,4 @@ msgid "alreay_scenario"
 msgstr "There is already a scenario in progress."
 
 msgid "not_found_scenario"
-msgstr "No scenario information in progress"
+msgstr "No scenario information in progress."

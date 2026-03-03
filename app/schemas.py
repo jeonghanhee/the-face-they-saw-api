@@ -22,5 +22,5 @@ class RetrieveScenarioResponse(BaseModel):
     statement: str
 
 class UploadMontageResponse(BaseModel):
-    details: List[Tuple[str, int]]
-    total: Tuple[str, int]
+    details: List[Tuple[str, int, float]]
+    total_score: int

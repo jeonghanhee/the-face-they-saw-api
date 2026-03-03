@@ -4,7 +4,7 @@ python-dotenv==1.2.1
 pydantic==2.12.5
 slowapi==0.1.9
 babel==2.18.0
-requests=2.32.5
+requests==2.32.5
 google-genai==1.65.0
 korean-name-generator==1.0.1
 python-multipart==0.0.22

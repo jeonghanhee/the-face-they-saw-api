@@ -5,11 +5,13 @@ from app.scenario.prompt import create_statement_system_prompt, create_statement
 from app.scenario import Scenario
 from app.llm.gemini_client import generate_content
 from korean_name_generator import namer
-# People
+
+# 장소
 PLACES = ["골목길", "폐가", "폐교", "주택", "아파트"]
+# 시간대
 TIMEZONES = ["아침", "오후", "저녁", "새벽"]
 
-# Witness
+# 성격
 PERSONALITIES = ["겁이 많고 소심하다", "조심스럽다", "용감하다", "자신감이 있다"]
 
 # 얼굴형
@@ -23,15 +25,16 @@ STYLES = ["덥수룩한 머리", "포니테일", "정갈한 가르마", "비니"
 # 얼굴에 붙어있는 눈에 띄는 점
 SINGULARITIES = ["눈가 흉터", "입가 점", "뿔테 안경", "무선 이어폰", "피어싱"]
 
+# 최대 단계 수 
 MAX_LEVEL = 5
-INDICDENT_TYPES = ["살인", "성폭력", "강도", "폭행", "상해"]
+CRIME_TYPES = ["살인", "성폭력", "강도", "폭행", "상해"]
 
 async def create_scenario(level: int) -> Scenario:
     if level <= 0 or level > MAX_LEVEL:
         raise TypeError("Levels must be from 1 to 5.")
     
     # 사건 정보 생성
-    i_type = random.choice(INDICDENT_TYPES)
+    i_type = random.choice(CRIME_TYPES)
     i_place = random.choice(PLACES)
     i_timezone = random.choice(TIMEZONES)
 
@@ -45,7 +48,7 @@ async def create_scenario(level: int) -> Scenario:
     # 몽타주 생성
     composite_sketch = CompositeSketch()
     if level == 1:
-        composite_sketch.set_face_shape("동근형") #(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
+        composite_sketch.set_face_shape(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
     if level == 2:
         composite_sketch.set_eyes_of(random.choice(EYES_OFS) if EYES_OFS else "")
     if level == 3:

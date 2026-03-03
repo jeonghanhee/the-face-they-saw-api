@@ -60,7 +60,7 @@ async def retrieve_scenario(req: RetrieveScenarioRequest, x_language: str = Head
     if exists.scenario:
         return JSONResponse(status_code=409, content={"message": _("alreay_scenario")})
     new_scenario = await create_scenario(req.level)
-    exists.scenario = new_scenario # 시나리오 등록 
+    exists.set_scenario(new_scenario) # 시나리오 등록
     return {
         "name": new_scenario.witness.name,
         "gender": new_scenario.witness.gender,
@@ -75,10 +75,23 @@ async def upload_montage(req: GeneralRequest = Depends(GeneralRequest.as_form), 
         return JSONResponse(status_code=409, content={"message": _("not_registered")})
     if not exists.scenario:
         return JSONResponse(status_code=409, content={"message": _("not_found_scenario")})
+    
     result = await similarity_check(exists.scenario, file)
-    print(result)
+    
+    detail_section = result.split("[DETAIL]")[1].split("[TOTAL]")[0].strip()
+    total_section = result.split("[TOTAL]")[1].strip()
+
+    detail_lines = detail_section.split("\n")
+    total_score = total_section.split("|")[1].replace("%", "")
+
+    details = [
+        (line.split("|")[0], int(line.split("|")[1].replace("%", "")), float(line.split("|")[2])) 
+        for line in detail_lines
+    ]
+
+    exists.set_scenario(None) # 시나리오 제거 
 
     return {
-        "details": [],
-        "total": ()
+        "details": details,
+        "total_score": total_score
     }

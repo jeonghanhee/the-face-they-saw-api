@@ -37,7 +37,5 @@ def test():
         timeout=5,
     )
 
-    print("status :", response.status_code)
+    print("status:", response.status_code)
     print("response:", response.json())
-
-test()

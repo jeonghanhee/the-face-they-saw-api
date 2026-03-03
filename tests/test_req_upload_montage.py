@@ -48,8 +48,5 @@ def test():
             headers=headers
         )
 
-    print("status :", response.status_code)
+    print("status:", response.status_code)
     print("response:", response.json())
-
-
-test()
