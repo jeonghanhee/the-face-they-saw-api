@@ -1,5 +1,4 @@
 from babel.messages import pofile, mofile
-from pathlib import Path
 
 def tb(po_file, mo_file):
     with open(po_file, "rb") as fpo:
