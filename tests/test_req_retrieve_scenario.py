@@ -28,7 +28,7 @@ def test():
     headers = make_headers()
     payload = {
         "client_id": CLIENT_ID,
-        "level": 1
+        "level": 3
     }
 
     response = requests.post(

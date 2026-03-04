@@ -34,9 +34,9 @@ async def create_scenario(level: int) -> Scenario:
         raise TypeError("Levels must be from 1 to 5.")
     
     # 사건 정보 생성
-    i_type = random.choice(CRIME_TYPES)
-    i_place = random.choice(PLACES)
-    i_timezone = random.choice(TIMEZONES)
+    crime_type = random.choice(CRIME_TYPES)
+    place = random.choice(PLACES)
+    timezone = random.choice(TIMEZONES)
 
     # 증인 생성
     is_female = random.choice([True, False])
@@ -45,26 +45,28 @@ async def create_scenario(level: int) -> Scenario:
     witness_personality = random.choice(PERSONALITIES)
     witness = Witness(witness_name, witness_gender, witness_personality)
 
+    print(level)
+
     # 몽타주 생성
     composite_sketch = CompositeSketch()
-    if level == 1:
+    if level >= 1:
         composite_sketch.set_face_shape(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
-    if level == 2:
+    if level >= 2:
         composite_sketch.set_eyes_of(random.choice(EYES_OFS) if EYES_OFS else "")
-    if level == 3:
+    if level >= 3:
         composite_sketch.set_nose_and_mouth(random.choice(NOSE_AND_MOUTHS) if NOSE_AND_MOUTHS else "")
-    if level == 4:
+    if level >= 4:
         composite_sketch.set_style(random.choice(STYLES) if STYLES else "")
-    if level == 5:
+    if level >= 5:
         composite_sketch.set_singularity(random.choice(SINGULARITIES) if SINGULARITIES else "")
 
     # 시스템 프롬프트 생성
     ssp = create_statement_system_prompt(
-        ct=i_type,
+        ct=crime_type,
         name=witness.name,
         gender=witness.gender,
-        place=i_place,
-        timezone=i_timezone,
+        place=place,
+        timezone=timezone,
         per=witness.personality,
         cd=composite_sketch.cumulative_description
     )
@@ -80,9 +82,9 @@ async def create_scenario(level: int) -> Scenario:
     scenario = Scenario(
         witness=witness, 
         composite_sketch=composite_sketch,
-        indicdent=i_type, 
-        place=i_place, 
-        timezone=i_timezone, 
+        crime_type=crime_type, 
+        place=place, 
+        timezone=timezone,
         statement=raw_statement
     )
 

@@ -32,9 +32,9 @@ class CompositeSketch:
     @property
     def cumulative_description(self):
         description = ""
-        description += f"- {self.face_shape}" if self.face_shape else ""
-        description += f"- {self.eyes_of}" if self.eyes_of else ""
-        description += f"- {self.nose_and_mouth}" if self.nose_and_mouth else ""
-        description += f"- {self.style}" if self.style else ""
+        description += f"- {self.face_shape}\n" if self.face_shape else ""
+        description += f"- {self.eyes_of}\n" if self.eyes_of else ""
+        description += f"- {self.nose_and_mouth}\n" if self.nose_and_mouth else ""
+        description += f"- {self.style}\n" if self.style else ""
         description += f"- {self.singularity}" if self.singularity else ""
         return description

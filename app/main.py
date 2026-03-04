@@ -64,7 +64,8 @@ async def retrieve_scenario(req: RetrieveScenarioRequest, x_language: str = Head
     return {
         "name": new_scenario.witness.name,
         "gender": new_scenario.witness.gender,
-        "statement": new_scenario.statement
+        "statement": new_scenario.statement,
+        "crime_type": new_scenario.crime_type
     }
 
 @app.post("/upload_montage", status_code=200, response_model=UploadMontageResponse)

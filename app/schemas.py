@@ -20,6 +20,7 @@ class RetrieveScenarioResponse(BaseModel):
     name: str
     gender: str
     statement: str
+    crime_type: str
 
 class UploadMontageResponse(BaseModel):
     details: List[Tuple[str, int, float]]
