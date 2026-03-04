@@ -9,6 +9,9 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise TypeError("GEMINI_API_KEY not found.")
+GEMINI_MODEL_NAME = os.getenv("GEMINI_MODEL_NAME")
+if not GEMINI_MODEL_NAME:
+    raise TypeError("GEMINI_MODEL_NAME not found.")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -30,7 +33,7 @@ def __generate_content_sync(
         contents = user_prompt
 
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model=GEMINI_MODEL_NAME,
         contents=contents,
         config=GenerateContentConfig(
             system_instruction=[system_prompt]
