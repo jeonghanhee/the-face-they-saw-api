@@ -1,9 +1,8 @@
-from fastapi import Depends, FastAPI, File, Header, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Header, UploadFile
 from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
-from app.scenario import Scenario
 from app.services.scenario_factory import create_scenario
 from app.services.similarity_service import similarity_check
 from app.schemas import *
