@@ -45,8 +45,6 @@ async def create_scenario(level: int) -> Scenario:
     witness_personality = random.choice(PERSONALITIES)
     witness = Witness(witness_name, witness_gender, witness_personality)
 
-    print(level)
-
     # 몽타주 생성
     composite_sketch = CompositeSketch()
     if level >= 1:
