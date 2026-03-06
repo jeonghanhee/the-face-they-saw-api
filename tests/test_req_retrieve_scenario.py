@@ -32,7 +32,7 @@ def test():
     }
 
     response = requests.post(
-        f"{BASE_URL}/retrieve_scenario",
+        f"{BASE_URL}/generate_scenario",
         json=payload,
         headers=headers
     )

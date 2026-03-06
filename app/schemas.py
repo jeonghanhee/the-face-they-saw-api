@@ -12,11 +12,11 @@ class GeneralRequest(BaseModel):
 class GeneralResponse(BaseModel):
     message: str
 
-class RetrieveScenarioRequest(BaseModel):
+class GenerateScenarioRequest(BaseModel):
     client_id: str
     level: int
 
-class RetrieveScenarioResponse(BaseModel):
+class GenerateScenarioResponse(BaseModel):
     name: str
     gender: str
     statement: str

@@ -38,6 +38,7 @@ async def join_game(req: GeneralRequest, x_language: str = Header(default="ko"))
     exists = await cda.get_client(req.client_id)
     if exists:
         return JSONResponse(status_code=409, content={"message": _("already_registered")})
+
     await cda.add_client(req.client_id)
     return {"message": _("register_success")}
 
@@ -50,12 +51,13 @@ async def leave_game(req: GeneralRequest, x_language: str = Header(default="ko")
         return {"message": _("removed_success")}
     return JSONResponse(status_code=409, content={"message": _("not_registered")})
 
-@app.post("/retrieve_scenario", status_code=200, response_model=RetrieveScenarioResponse)
-async def retrieve_scenario(req: RetrieveScenarioRequest, x_language: str = Header(default="ko")):
+@app.post("/generate_scenario", status_code=200, response_model=GenerateScenarioResponse)
+async def generate_scenario(req: GenerateScenarioRequest, x_language: str = Header(default="ko")):
     _ = get_translation(x_language)
     exists = await cda.get_client(req.client_id)
+
     if not exists:
-        return JSONResponse(status_code=409, content={"message": _("cannot_retrieve_scenario")})
+        return JSONResponse(status_code=409, content={"message": _("cannot_generate_scenario")})
     if exists.scenario:
         return JSONResponse(status_code=409, content={"message": _("alreay_scenario")})
     new_scenario = await create_scenario(req.level)
