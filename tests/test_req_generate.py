@@ -27,14 +27,14 @@ def make_headers():
 def test():
     headers = make_headers()
     payload = {
-        "client_id": CLIENT_ID
+        "client_id": CLIENT_ID,
+        "level": 1
     }
 
     response = requests.post(
-        f"{BASE_URL}/join_game",
+        f"{BASE_URL}/api/generate",
         json=payload,
-        headers=headers,
-        timeout=5,
+        headers=headers
     )
 
     print("status:", response.status_code)

@@ -31,7 +31,7 @@ def test():
     }
 
     response = requests.post(
-        f"{BASE_URL}/leave_game",
+        f"{BASE_URL}/api/leave",
         json=payload,
         headers=headers,
         timeout=5,

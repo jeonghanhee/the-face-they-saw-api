@@ -1,9 +1,7 @@
 import random
-from app.scenario.witness import Witness
-from app.scenario.composite_sketch import CompositeSketch
-from app.scenario.prompt import create_statement_system_prompt, create_statement_user_prompt
-from app.scenario import Scenario
-from app.llm.gemini_client import generate_content
+from app.models import Scenario, CompositeSketch, Witness
+from app.utils.prompt_templates import create_statement_system_prompt, create_statement_user_prompt
+from app.services.llm_client import generate_content
 from korean_name_generator import namer
 
 # 장소
@@ -48,15 +46,15 @@ async def create_scenario(level: int) -> Scenario:
     # 몽타주 생성
     composite_sketch = CompositeSketch()
     if level >= 1:
-        composite_sketch.set_face_shape(random.choice(FACE_SHAPES) if FACE_SHAPES else "")
+        composite_sketch.face_shape = random.choice(FACE_SHAPES) if FACE_SHAPES else ""
     if level >= 2:
-        composite_sketch.set_eyes_of(random.choice(EYES_OFS) if EYES_OFS else "")
+        composite_sketch.eyes_of = random.choice(EYES_OFS) if EYES_OFS else ""
     if level >= 3:
-        composite_sketch.set_nose_and_mouth(random.choice(NOSE_AND_MOUTHS) if NOSE_AND_MOUTHS else "")
+        composite_sketch.nose_and_mouth = random.choice(NOSE_AND_MOUTHS) if NOSE_AND_MOUTHS else ""
     if level >= 4:
-        composite_sketch.set_style(random.choice(STYLES) if STYLES else "")
+        composite_sketch.style = random.choice(STYLES) if STYLES else ""
     if level >= 5:
-        composite_sketch.set_singularity(random.choice(SINGULARITIES) if SINGULARITIES else "")
+        composite_sketch.singularity = random.choice(SINGULARITIES) if SINGULARITIES else ""
 
     # 시스템 프롬프트 생성
     ssp = create_statement_system_prompt(
