@@ -1,6 +1,6 @@
 from fastapi import Form
 from pydantic import BaseModel
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 class InvestigateRequest(BaseModel):
     question: str
@@ -22,5 +22,5 @@ class UploadRequest(BaseModel):
         return cls(description=description)
 
 class UploadResponse(BaseModel):
-    details: List[Tuple[str, int, float]]
-    similarity: float
+    details: List[Tuple[str, Optional[int]]]
+    score: int

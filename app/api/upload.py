@@ -16,12 +16,20 @@ async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: Uplo
     total_section = result.split("[TOTAL]")[1].strip()
 
     detail_lines = detail_section.split("\n")
-    total_score = total_section.split("|")[1].replace("%", "")
+    total_score = int(total_section.split("|")[1].replace("%", "").strip())
 
-    details = [
-        (line.split("|")[0], int(line.split("|")[1].replace("%", "")), float(line.split("|")[2])) 
-        for line in detail_lines
-    ]
+    details = []
+    for line in detail_lines:
+        parts = line.split("|")
+        name = parts[0].strip()
+        value = parts[1].strip()
+
+        if value == "판단 불가":
+            score = None
+        else:
+            score = int(value.replace("%", ""))
+
+        details.append((name, score))
 
     return {
         "details": details,
