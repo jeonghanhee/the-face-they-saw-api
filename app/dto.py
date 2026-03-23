@@ -4,11 +4,15 @@ from typing import List, Tuple
 
 class InvestigateRequest(BaseModel):
     question: str
-    trusLevel: int
+    case_name: str
+    name: str
+    reliability: int
+    memory: str
+    personality: str
 
 class InvestigateResponse(BaseModel):
     answer: str
-    trustDelta: int
+    reliability_delta: int
 
 class UploadRequest(BaseModel):
     description: List[str]
@@ -19,4 +23,4 @@ class UploadRequest(BaseModel):
 
 class UploadResponse(BaseModel):
     details: List[Tuple[str, int, float]]
-    totalScore: int
+    similarity: float

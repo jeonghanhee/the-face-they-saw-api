@@ -1,19 +1,14 @@
-from fastapi import APIRouter, Depends, File, Header, UploadFile, Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, File, UploadFile
 from app.dto import UploadRequest, UploadResponse
 from app.llm_client import generate_content
-from app.prompt_templates import SIMILARITY_CHECK_SYSTEM_PROMPT, create_similarity_check_user_prompt
+from app.prompt_templates import SIMILARITY_CHECK_SYSTEM_PROMPT
+from app.prompt_parser import create_similarity_check_user_prompt
 from app.security import secure_endpoint
 
 router = APIRouter()
 
 @router.post("/upload", response_model=UploadResponse)
-async def upload(
-    request: Request, 
-    req: UploadRequest = Depends(UploadRequest.as_form), 
-    file: UploadFile = File(...), 
-    dependencies=[Depends(secure_endpoint)]
-):
+async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: UploadFile = File(...), dependencies=[Depends(secure_endpoint)]):
     sup = create_similarity_check_user_prompt(req.description)
     result = await generate_content(sup, SIMILARITY_CHECK_SYSTEM_PROMPT, file)
     
@@ -30,5 +25,5 @@ async def upload(
 
     return {
         "details": details,
-        "totalScore": total_score
+        "score": total_score
     }

@@ -23,10 +23,7 @@ def __generate_content_sync(
 ) -> str:
     if image_bytes:
         contents = [
-            Part.from_bytes(
-                data=image_bytes,
-                mime_type=mime_type
-            ),
+            Part.from_bytes(data=image_bytes, mime_type=mime_type),
             user_prompt
         ]
     else:
