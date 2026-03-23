@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.api import auth, scenario, sketch
+from . import investigate, ping, upload
 
 api_router = APIRouter()
 
-api_router.include_router(auth.router, tags=["Auth"])
-api_router.include_router(scenario.router, tags=["Scenario"])
-api_router.include_router(sketch.router, tags=["Sketch"])
+api_router.include_router(ping.router, tags=["Ping"])
+api_router.include_router(investigate.router, tags=["Investigate"])
+api_router.include_router(upload.router, tags=["Upload"])

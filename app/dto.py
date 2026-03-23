@@ -2,26 +2,21 @@ from fastapi import Form
 from pydantic import BaseModel
 from typing import List, Tuple
 
-class GeneralRequest(BaseModel):
-    client_id: str
+class InvestigateRequest(BaseModel):
+    question: str
+    trusLevel: int
+
+class InvestigateResponse(BaseModel):
+    answer: str
+    trustDelta: int
+
+class UploadRequest(BaseModel):
+    description: List[str]
 
     @classmethod
-    def as_form(cls, client_id: str = Form(...)):
-        return cls(client_id=client_id)
+    def as_form(cls, description: List[str] = Form(...)):
+        return cls(description=description)
 
-class GeneralResponse(BaseModel):
-    message: str
-
-class GenerateScenarioRequest(BaseModel):
-    client_id: str
-    level: int
-
-class GenerateScenarioResponse(BaseModel):
-    name: str
-    gender: str
-    statement: str
-    crime_type: str
-
-class UploadMontageResponse(BaseModel):
+class UploadResponse(BaseModel):
     details: List[Tuple[str, int, float]]
-    total_score: int
+    totalScore: int

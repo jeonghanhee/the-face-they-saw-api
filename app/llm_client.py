@@ -47,7 +47,7 @@ async def generate_content(user_prompt: str, system_prompt: str, image: UploadFi
 
     if image:
         image_bytes = await image.read()
-        mime_type = image.content_type # image/png, image/jpeg 등
+        mime_type = image.content_type
 
     loop = asyncio.get_running_loop()
     result = await loop.run_in_executor(
