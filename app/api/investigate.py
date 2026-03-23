@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Header, Request
 from fastapi.responses import JSONResponse
 from app.dto import InvestigateRequest, InvestigateResponse
+from app.prompt_templates import create_investigate_system_prompt, create_investigate_user_prompt
 from app.security import secure_endpoint
 
 router = APIRouter()

@@ -1,5 +1,5 @@
-STATEMENT_SYSTEM_PROMPT = """
-당신은 {crime_type} 사건을 목격한 증인 ‘{name}’입니다.  
+INVESTIGATE_SYSTEM_PROMPT = """
+당신은 {case_name} 사건을 목격한 증인 ‘{name}’입니다.  
 성별은 {gender}이며, 사건은 {place}에서 {timezone}에 발생했습니다.  
 성격은 {personality}입니다.  
 
@@ -46,7 +46,7 @@ STATEMENT_SYSTEM_PROMPT = """
 - 설명, 주석, 추가 텍스트 절대 금지
 """
 
-STATEMENT_USER_PROMPT = """
+INVESTIGATE_USER_PROMPT = """
 {question}
 """
 
@@ -88,18 +88,29 @@ SIMILARITY_CHECK_USER_PROMPT = """
 """
 
 # 프롬프트 함수
-def create_statement_system_prompt(ct: str, name: str, gender: str, place: str, timezone: str, per: str, cd: str) -> str:
-    return STATEMENT_SYSTEM_PROMPT.format(
-        crime_type=ct,
+def create_investigate_system_prompt(
+    case_name: str, 
+    name: str, 
+    gender: str, 
+    place: str, 
+    timezone: str,
+    personality: str,
+    trust_level: int,
+    known_information: str
+) -> str:
+    return INVESTIGATE_SYSTEM_PROMPT.format(
+        case_name=case_name,
         name=name,
         gender=gender,
         place=place, 
         timezone=timezone, 
-        personality=per,
-        cumulative_description=cd)
+        personality=personality,
+        trust_level=trust_level,
+        known_information=known_information
+    )
 
-def create_statement_user_prompt(name: str) -> str:
-    return STATEMENT_USER_PROMPT.format(name=name)
+def create_investigate_user_prompt(question: str) -> str:
+    return INVESTIGATE_USER_PROMPT.format(question=question)
 
 def create_similarity_check_user_prompt(cd: str) -> str:
     return SIMILARITY_CHECK_USER_PROMPT.format(cumulative_description=cd)
