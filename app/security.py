@@ -22,5 +22,5 @@ def verify_signature(x_signature: str = Header(...),x_timestamp: int = Header(..
     if x_signature != expected:
         raise HTTPException(401, "Invalid Signature")
 
-def secure_endpoint():
-    return Depends(verify_game_key), Depends(verify_signature)
+def secure_gate(game_key: str = Depends(verify_game_key),  signature: str = Depends(verify_signature)):
+    return True

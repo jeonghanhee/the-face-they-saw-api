@@ -3,12 +3,12 @@ from app.dto import UploadRequest, UploadResponse
 from app.llm_client import generate_content
 from app.prompt_templates import SIMILARITY_CHECK_SYSTEM_PROMPT
 from app.prompt_parser import create_similarity_check_user_prompt
-from app.security import secure_endpoint
+from app.security import secure_gate
 
 router = APIRouter()
 
-@router.post("/upload", response_model=UploadResponse)
-async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: UploadFile = File(...), dependencies=[Depends(secure_endpoint)]):
+@router.post("/upload", response_model=UploadResponse, dependencies=[Depends(secure_gate)])
+async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: UploadFile = File(...)):
     sup = create_similarity_check_user_prompt(req.criteria)
     result = await generate_content(sup, SIMILARITY_CHECK_SYSTEM_PROMPT, file)
     
