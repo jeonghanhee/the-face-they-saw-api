@@ -15,12 +15,16 @@ class InvestigateResponse(BaseModel):
     reliability_delta: int
 
 class UploadRequest(BaseModel):
-    description: List[str]
+    criteria: List[str]
 
     @classmethod
-    def as_form(cls, description: List[str] = Form(...)):
-        return cls(description=description)
+    def as_form(cls, criteria: List[str] = Form(...)):
+        return cls(criteria=criteria)
+
+class ScoredItem(BaseModel):
+    name: str
+    score: int
 
 class UploadResponse(BaseModel):
-    details: List[Tuple[str, Optional[int]]]
+    details: List[ScoredItem]
     score: int

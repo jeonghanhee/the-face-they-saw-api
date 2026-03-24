@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post("/upload", response_model=UploadResponse)
 async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: UploadFile = File(...), dependencies=[Depends(secure_endpoint)]):
-    sup = create_similarity_check_user_prompt(req.description)
+    sup = create_similarity_check_user_prompt(req.criteria)
     result = await generate_content(sup, SIMILARITY_CHECK_SYSTEM_PROMPT, file)
     
     detail_section = result.split("[DETAIL]")[1].split("[TOTAL]")[0].strip()
@@ -21,15 +21,18 @@ async def upload(req: UploadRequest = Depends(UploadRequest.as_form), file: Uplo
     details = []
     for line in detail_lines:
         parts = line.split("|")
+        if len(parts) < 2: 
+            continue
+        
         name = parts[0].strip()
         value = parts[1].strip()
 
         if value == "판단 불가":
-            score = None
+            score = -1
         else:
-            score = int(value.replace("%", ""))
+            score = int(value.replace("%", "").strip())
 
-        details.append((name, score))
+        details.append({"name": name, "score": score})
 
     return {
         "details": details,
