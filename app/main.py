@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import api_router
+from app.routers import router
 
 app = FastAPI(title="The Face They Saw API")
-app.include_router(api_router, prefix="/api")
+app.include_router(router, prefix="/api")
